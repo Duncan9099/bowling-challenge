@@ -5,6 +5,7 @@ function Frame() {
   this.secondRoll = null
   this.frameScore = 0
   this.frameCompleted = false
+  this.MAX_FIRST_ROLL = 10
 }
 
 var frame = new Frame
@@ -20,11 +21,19 @@ Frame.prototype.isFrameCompleted = function() {
 }
 
 Frame.prototype.doFirstRoll = function(pins) {
-  return this.firstRoll = pins
+  if (pins > this.MAX_FIRST_ROLL) {
+    return false
+  } else {
+    return this.firstRoll = pins
+  }
 }
 
 Frame.prototype.doSecondRoll = function(pins) {
-  return this.secondRoll = pins
+  if (pins > frame.maxSecondRoll(pins)) {
+    return false
+  } else {
+    return this.secondRoll = pins
+  }
 }
 
 Frame.prototype.isStrike = function() {
@@ -41,4 +50,18 @@ Frame.prototype.isSpare = function(pins) {
   } else {
     return false
   }
+}
+
+Frame.prototype.checkScore = function() {
+  if (frame.isStrike()) {
+    return this.score = 'Strike'
+  } else if (frame.isSpare()) {
+    return this.score = 'Spare'
+  } else {
+    return this.score = this.firstRoll + this.secondRoll
+  }
+}
+
+Frame.prototype.maxSecondRoll = function(pins) {
+  return (10 - this.firstRoll)
 }
